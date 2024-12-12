@@ -44,11 +44,13 @@ class MrpProduction(models.Model):
             order.propagated_lot_producing = False
             move_with_lot = order._get_propagating_component_move()
             line_with_sn = move_with_lot.move_line_ids.filtered(
-                lambda l: (
-                    l.lot_id
-                    and l.product_id.tracking == "serial"
+                lambda stock_move_line: (
+                    stock_move_line.lot_id
+                    and stock_move_line.product_id.tracking == "serial"
                     and tools.float_compare(
-                        l.qty_done, 1, precision_rounding=l.product_uom_id.rounding
+                        stock_move_line.qty_done,
+                        1,
+                        precision_rounding=stock_move_line.product_uom_id.rounding,
                     )
                     == 0
                 )

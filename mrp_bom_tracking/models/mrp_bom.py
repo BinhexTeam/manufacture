@@ -51,7 +51,7 @@ class MrpBomLine(models.Model):
     def write(self, values):
         if "product_id" in values:
             for bom in self.mapped("bom_id"):
-                lines = self.filtered(lambda l: l.bom_id == bom)
+                lines = self.filtered(lambda line: line.bom_id == bom)
                 product_id = values.get("product_id")
                 if product_id:
                     product_id = self.env["product.product"].browse(product_id)
@@ -64,7 +64,7 @@ class MrpBomLine(models.Model):
                     )
         elif "product_qty" in values or "product_uom_id" in values:
             for bom in self.mapped("bom_id"):
-                lines = self.filtered(lambda l: l.bom_id == bom)
+                lines = self.filtered(lambda line: line.bom_id == bom)
                 if lines:
                     product_qty = values.get("product_qty") or lines.product_qty
                     product_uom_id = values.get("product_uom_id")
